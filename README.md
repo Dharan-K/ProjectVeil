@@ -1,4 +1,4 @@
-# Veil — Private Eligibility Proofs for Stablecoin Disbursements on Stellar
+.# Veil — Private Eligibility Proofs for Stablecoin Disbursements on Stellar
 
 > **Stellar Hacks: Real-World ZK** submission.
 > Prove you're an approved recipient and claim a payment **without revealing who you are** — using a zero-knowledge proof generated in your browser and **verified on-chain by a Soroban smart contract** on Stellar testnet.
