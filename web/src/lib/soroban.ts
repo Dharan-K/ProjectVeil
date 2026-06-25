@@ -20,14 +20,28 @@ import {
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 const toScBytes = (u8: Uint8Array) => xdr.ScVal.scvBytes(Buffer.from(u8))
 
+/** Optional connected wallet: pays the fee, is the tx source, and signs. */
+export interface WalletSigner {
+  address: string
+  signXdr: (xdr: string) => Promise<string>
+}
+
 /**
  * Submit a Groth16 eligibility proof to the deployed VeilVerifier contract on
  * Stellar testnet. The contract verifies the BN254 pairing on-chain and spends
  * the nullifier; we return the resulting transaction hash.
+ *
+ * If `wallet` is provided, the connected wallet is the source account and signs
+ * the transaction; otherwise a throwaway demo key is used so the public demo
+ * works without any wallet installed.
  */
-export async function invokeVerifier(witness: ClaimWitness): Promise<OnChainResult> {
+export async function invokeVerifier(
+  witness: ClaimWitness,
+  wallet?: WalletSigner
+): Promise<OnChainResult> {
   const server = new rpc.Server(RPC_URL)
-  const kp = Keypair.fromSecret(DEMO_SECRET)
+  const kp = wallet ? null : Keypair.fromSecret(DEMO_SECRET)
+  const sourceAddr = wallet ? wallet.address : kp!.publicKey()
 
   const oc = witnessToOnChain(witness.proof, witness.publicSignals)
 
@@ -41,7 +55,7 @@ export async function invokeVerifier(witness: ClaimWitness): Promise<OnChainResu
   const signalsVal = xdr.ScVal.scvVec(oc.signals.map(toScBytes))
 
   const contract = new Contract(CONTRACT_ID)
-  const source = await server.getAccount(kp.publicKey())
+  const source = await server.getAccount(sourceAddr)
 
   let tx = new TransactionBuilder(source, {
     fee: BASE_FEE,
@@ -64,8 +78,16 @@ export async function invokeVerifier(witness: ClaimWitness): Promise<OnChainResu
     return { ok: false, mode: 'testnet', txHash: '', nullifierHash: witness.nullifierHash, error: friendly }
   }
 
-  tx.sign(kp)
-  const sent = await server.sendTransaction(tx)
+  // Sign: connected wallet (returns signed XDR) or the embedded demo key.
+  let signedTx = tx
+  if (wallet) {
+    const signedXdr = await wallet.signXdr(tx.toXDR())
+    signedTx = TransactionBuilder.fromXDR(signedXdr, Networks.TESTNET) as typeof tx
+  } else {
+    tx.sign(kp!)
+  }
+
+  const sent = await server.sendTransaction(signedTx)
   if (sent.status === 'ERROR') {
     return {
       ok: false,

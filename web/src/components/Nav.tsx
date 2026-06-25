@@ -1,7 +1,13 @@
 import { motion } from 'framer-motion'
 import { VeilMark } from './VeilMark'
+import { useWallet } from './WalletContext'
+
+function shortAddr(a: string) {
+  return `${a.slice(0, 4)}…${a.slice(-4)}`
+}
 
 export default function Nav() {
+  const { address, connecting, error, connect, disconnect } = useWallet()
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
@@ -20,12 +26,39 @@ export default function Nav() {
           <a href="#demo" className="transition-colors hover:text-white">Live demo</a>
           <a href="#stack" className="transition-colors hover:text-white">Stack</a>
         </div>
-        <a
-          href="#demo"
-          className="rounded-lg bg-veil-violet/90 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-veil-violet"
-        >
-          Try it
-        </a>
+        <div className="relative">
+          {address ? (
+            <button
+              onClick={disconnect}
+              title="Click to disconnect"
+              className="group flex items-center gap-2 rounded-lg border border-veil-teal/40 bg-veil-teal/10 px-4 py-2 text-sm font-semibold text-veil-teal transition-colors hover:bg-veil-teal/15"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-veil-teal pulse-glow" />
+              <span className="mono">{shortAddr(address)}</span>
+            </button>
+          ) : (
+            <button
+              onClick={connect}
+              disabled={connecting}
+              className="rounded-lg bg-veil-violet/90 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-veil-violet disabled:opacity-60"
+            >
+              {connecting ? 'Connecting…' : 'Connect wallet'}
+            </button>
+          )}
+          {error && !address && (
+            <div className="absolute right-0 top-full mt-2 w-60 rounded-lg border border-veil-pink/40 bg-veil-panel/95 p-3 text-xs text-veil-pink shadow-xl">
+              {error}
+              {/freighter/i.test(error) && (
+                <>
+                  {' '}
+                  <a href="https://www.freighter.app/" target="_blank" rel="noreferrer" className="underline">
+                    Get Freighter ↗
+                  </a>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </nav>
     </motion.header>
   )

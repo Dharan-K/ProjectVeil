@@ -106,6 +106,8 @@ npm run dev      # http://localhost:5173
 
 The frontend has a **Local / Testnet** toggle: *Testnet* submits the proof to the live deployed contract; *Local* verifies in-browser (useful offline).
 
+**Wallet support:** click **Connect wallet** to sign and submit the on-chain claim with your own **Freighter** account (the proof is then cryptographically bound to your address). No wallet? A throwaway testnet key pays the fee automatically, so the demo works with zero setup.
+
 ---
 
 ## On-chain deployment

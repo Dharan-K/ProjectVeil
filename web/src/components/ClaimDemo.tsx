@@ -13,6 +13,8 @@ import {
   type ClaimWitness,
 } from '../lib/prover'
 import { submitClaim, EXPLORER_CONTRACT, CONTRACT_ID, type OnChainResult, type OnChainMode } from '../lib/stellar'
+import { addressToField } from '../lib/veilTree'
+import { useWallet } from './WalletContext'
 
 const MEMBERS = 8
 
@@ -46,7 +48,11 @@ export default function ClaimDemo() {
   const [error, setError] = useState<string | null>(null)
   const [recipient] = useState(() => ({ addr: fakeStellarAddr(), field: randField() }))
   const [mode, setMode] = useState<OnChainMode>('testnet')
+  const wallet = useWallet()
   const built = useRef(false)
+
+  // The address the disbursement is bound to: the connected wallet if any.
+  const claimAddr = wallet.address ?? recipient.addr
 
   useEffect(() => {
     if (built.current) return
@@ -79,7 +85,12 @@ export default function ClaimDemo() {
       550
     )
     try {
-      const w = await proveClaim(org, selected, recipient.field)
+      // Bind the proof to the connected wallet address when present, so the
+      // proof is cryptographically tied to whoever is claiming.
+      const recipientField = wallet.address
+        ? await addressToField(new TextEncoder().encode(wallet.address))
+        : recipient.field
+      const w = await proveClaim(org, selected, recipientField)
       clearInterval(ticker)
       setStage(proveStages.length - 1)
       setWitness(w)
@@ -114,7 +125,11 @@ export default function ClaimDemo() {
       return
     }
 
-    const result = await submitClaim(witness, recipient.addr, mode)
+    const signer =
+      mode === 'testnet' && wallet.address
+        ? { address: wallet.address, signXdr: wallet.signXdr }
+        : undefined
+    const result = await submitClaim(witness, claimAddr, mode, signer)
     if (!result.ok) {
       setError(result.error ?? 'On-chain verification failed.')
       setPhase('rejected')
@@ -150,8 +165,10 @@ export default function ClaimDemo() {
           {/* recipient identity bar */}
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-veil-border bg-black/20 px-4 py-3">
             <div>
-              <div className="text-[11px] uppercase tracking-wider text-veil-dim">Claiming wallet</div>
-              <Mono value={recipient.addr} chars={6} />
+              <div className="text-[11px] uppercase tracking-wider text-veil-dim">
+                {wallet.address ? 'Connected wallet' : 'Claiming wallet (demo)'}
+              </div>
+              <Mono value={claimAddr} chars={6} />
             </div>
             <div className="text-right">
               <div className="text-[11px] uppercase tracking-wider text-veil-dim">Org Merkle root</div>

@@ -46,10 +46,16 @@ function mockHash(seed: string): string {
   return out
 }
 
+export interface WalletSigner {
+  address: string
+  signXdr: (xdr: string) => Promise<string>
+}
+
 export async function submitClaim(
   witness: ClaimWitness,
   recipientAddr: string,
-  mode: OnChainMode
+  mode: OnChainMode,
+  wallet?: WalletSigner
 ): Promise<OnChainResult> {
   if (mode === 'local') {
     return {
@@ -62,5 +68,5 @@ export async function submitClaim(
 
   // Lazy-load the heavy Stellar SDK only when actually going on-chain.
   const { invokeVerifier } = await import('./soroban')
-  return invokeVerifier(witness)
+  return invokeVerifier(witness, wallet)
 }
