@@ -1,0 +1,16 @@
+# Render Blueprint — deploys the Veil frontend as a static site.
+# In the Render dashboard: New → Blueprint → connect this repo.
+services:
+  - type: web
+    name: veil
+    runtime: static
+    rootDir: web
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    headers:
+      - path: /zk/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable

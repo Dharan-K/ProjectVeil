@@ -1,0 +1,14 @@
+{
+  "network": "Stellar testnet",
+  "networkPassphrase": "Test SDF Network ; September 2015",
+  "rpcUrl": "https://soroban-testnet.stellar.org",
+  "contractId": "CCZVOEJROWSEN3MQWLSWRJXU5JWEKKLYK6FRWLKPRNAGA2MVSREZPWLA",
+  "contractExplorer": "https://stellar.expert/explorer/testnet/contract/CCZVOEJROWSEN3MQWLSWRJXU5JWEKKLYK6FRWLKPRNAGA2MVSREZPWLA",
+  "wasmHash": "6f8b898030ea28fd3a8fe4f4856cc639263663478571cfbfb77b22e651d2866e",
+  "deployer": "GBR6WRBPPYY7DUZRCUF7GHXY5MZQ2C2R3NLURRNV4HI6S6MEUH5TXG5I",
+  "transactions": {
+    "deploy": "https://stellar.expert/explorer/testnet/tx/c4a87d281678224afa50ae26095c2c72eaf04769ac164c74941cf70a7161cbee",
+    "claim_verified_on_chain": "https://stellar.expert/explorer/testnet/tx/9f124834d8ff3c534c410cb16f165c619cbd23f7755a87c7454fc60986eebe1e"
+  },
+  "notes": "claim() verified a real BN254 Groth16 proof on-chain and spent the nullifier 0x0d02ffd0...457055e4. Replaying the same proof is rejected with NullifierAlreadySpent (Error #3)."
+}

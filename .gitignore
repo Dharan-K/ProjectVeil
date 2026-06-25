@@ -1,0 +1,30 @@
+# Local editor / IDE directories
+.vscode/
+.idea/
+.claude/
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Builds
+web/dist/
+contracts/**/target/
+**/*.tsbuildinfo
+
+# Rust
+contracts/**/Cargo.lock
+
+# Downloaded toolchains & vendored clones (not part of the project source)
+tools/
+
+# Large ZK setup artifacts (regenerate via circuits/export_fixture.mjs / setup)
+circuits/*.ptau
+circuits/veil_0000.zkey
+circuits/onchain.json
+contracts/scripts/*.arg.json
+
+# Logs / OS
+*.log
+.DS_Store
+Thumbs.db
