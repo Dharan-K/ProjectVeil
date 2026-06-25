@@ -1,0 +1,23 @@
+<svg width="480" height="480" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c5cff"/>
+      <stop offset="55%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="44%" r="58%">
+      <stop offset="0%" stop-color="#7c5cff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#7c5cff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="480" height="480" rx="104" fill="#06060c"/>
+  <rect width="480" height="480" rx="104" fill="url(#glow)"/>
+  <rect x="1.5" y="1.5" width="477" height="477" rx="103" fill="none" stroke="url(#vg)" stroke-opacity="0.3" stroke-width="3"/>
+  <g transform="translate(240 240) scale(7.2) translate(-24 -24)">
+    <path d="M24 4 L41 11 V25 C41 35.5 33.5 42.5 24 45.5 C14.5 42.5 7 35.5 7 25 V11 Z"
+          fill="url(#vg)" fill-opacity="0.14" stroke="url(#vg)" stroke-width="1.7"/>
+    <path d="M13 25 C17 19 31 19 35 25 C31 31 17 31 13 25 Z"
+          fill="none" stroke="url(#vg)" stroke-width="1.5"/>
+    <circle cx="24" cy="25" r="3.3" fill="url(#vg)"/>
+  </g>
+</svg>
