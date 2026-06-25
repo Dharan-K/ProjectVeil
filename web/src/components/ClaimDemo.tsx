@@ -125,11 +125,10 @@ export default function ClaimDemo() {
       return
     }
 
-    const signer =
-      mode === 'testnet' && wallet.address
-        ? { address: wallet.address, signXdr: wallet.signXdr }
-        : undefined
-    const result = await submitClaim(witness, claimAddr, mode, signer)
+    // Relayer model: a relayer submits the tx so the claimer's own wallet is
+    // never linked to the claim on-chain (preserving privacy). The proof is
+    // still bound to the connected wallet address via the recipient signal.
+    const result = await submitClaim(witness, claimAddr, mode)
     if (!result.ok) {
       setError(result.error ?? 'On-chain verification failed.')
       setPhase('rejected')

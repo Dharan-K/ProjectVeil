@@ -1,10 +1,5 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from 'react'
-import {
-  connectWallet,
-  disconnectWallet,
-  getConnectedAddress,
-  signTransactionXdr,
-} from '../lib/wallet'
+import { connectWallet, disconnectWallet, getConnectedAddress } from '../lib/wallet'
 
 interface WalletCtx {
   address: string | null
@@ -12,7 +7,6 @@ interface WalletCtx {
   error: string | null
   connect: () => Promise<void>
   disconnect: () => void
-  signXdr: (xdr: string) => Promise<string>
 }
 
 const Ctx = createContext<WalletCtx | null>(null)
@@ -42,7 +36,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <Ctx.Provider value={{ address, connecting, error, connect, disconnect, signXdr: signTransactionXdr }}>
+    <Ctx.Provider value={{ address, connecting, error, connect, disconnect }}>
       {children}
     </Ctx.Provider>
   )
