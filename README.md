@@ -135,3 +135,14 @@ This is a hackathon build. To be transparent:
 ## Why Stellar
 
 Protocol 25 ("X-Ray") and 26 ("Yardstick") moved BN254 elliptic-curve math and Poseidon hashing into native host functions. That makes Groth16 verification — the exact operation Veil needs — cheap enough to run in a smart contract. Veil is a small, real demonstration of that capability pointed at a genuine real-world-money problem.
+
+---
+
+## Security Considerations
+
+- **Privacy:** Zero-Knowledge Proofs (ZKPs) ensure recipient identities remain private during the claim process.
+- **One-Time Claims:** Each claim uses a unique `nullifierHash`, preventing double-claim attempts.
+- **Wallet Binding:** Proofs are linked to the claimant's Stellar wallet to protect against front-running.
+- **Merkle Integrity:** The published Merkle root guarantees that the approved recipient list cannot be altered.
+- **Local Proof Generation:** Proofs are generated in the browser, ensuring private inputs never leave the user's device.
+- **Secure Verification:** All proofs are verified on-chain using Stellar's native BN254 pairing host functions.
