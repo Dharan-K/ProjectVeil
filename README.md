@@ -11,7 +11,7 @@
 
 Stellar moves real money — stablecoins, aid, payroll, cross-border settlement. But disbursement lists are a privacy disaster: the moment an NGO, DAO, or employer pays a list of approved people on a public ledger, **everyone can see exactly who received what**. Recipients of aid, whistleblower grants, or sensitive payments get doxxed by the very transparency that makes the chain trustworthy.
 
-## The idea
+## The idea.
 
 **Veil** decouples *eligibility* from *identity*.
 
